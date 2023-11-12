@@ -27,12 +27,32 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            
+                         <li class="nav-item ms-auto">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">
+                                <i class="fa-solid fa-user me-2">
+                            </i>@User.FindFirst("Username").Value</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout"><i class="fa-solid fa-id-card me-2"></i>Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            
                         <li class="nav-item ms-auto">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login"><i class="fa-solid fa-user me-2"></i>Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register"><i class="fa-solid fa-id-card me-2"></i></i>Register</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register"><i class="fa-solid fa-id-card me-2"></i>Register</a>
                         </li>
+                        }
+
+
                     </ul>
                 </div>
             </div>
