@@ -1,4 +1,4 @@
-﻿@model LoginViewModel
+﻿@model RegisterViewModel
 
 @{
     ViewData["Title"] = "Login";
@@ -7,7 +7,7 @@
 
 <div class="row">
     <div class="col-4 offset-4">
-        <h1 class="display-4 border-bottom text-center pb-2"><i class="fa-solid fa-user me-2"></i></h1>
+        <h1 class="display-4 border-bottom text-center pb-2"><i class="fa-solid fa-id-card me-2"></i></i></h1>
     </div>
 </div>
 
@@ -26,8 +26,14 @@
                 <Input asp-for="Password" type="password" class="form-control" placeholder="" />
                 <span asp-validation-for="Password" class="text-danger small"></span>
             </div>
+            <div class="form-group mb-3">
+                <label asp-for="RePassword" class="form-label">RePassword</label>
+                <Input asp-for="RePassword" type="password" class="form-control" placeholder="" />
+                <span asp-validation-for="RePassword" class="text-danger small"></span>
+            </div>
+
             <div class="form-group d-grid mb-3">
-                <button class="btn btn-primary d-block" type="submit"><i class="fa-solid fa-right-to-bracket me-2"></i>Login </button>
+                <button class="btn btn-primary d-block" type="submit"><i class="fa-solid fa-right-to-bracket me-2"></i>Register </button>
             </div>
         </form>
     </div>
