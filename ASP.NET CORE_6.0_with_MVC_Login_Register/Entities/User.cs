@@ -23,7 +23,10 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Entities
         public bool Locked { get; set; }
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
-    }
 
+        [Required]
+		[StringLength(30)]
+		public string Role { get; set; } = "user";
+    }
 
 }

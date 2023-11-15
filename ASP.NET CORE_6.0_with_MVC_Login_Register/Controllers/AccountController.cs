@@ -3,6 +3,7 @@ using ASP.NET_CORE_6._0_with_MVC_Login_Register.Entities;
 using ASP.NET_CORE_6._0_with_MVC_Login_Register.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NETCore.Encrypt.Extensions;
@@ -10,6 +11,7 @@ using System.Security.Claims;
 
 namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly DatabaseContext _databaseContext;
@@ -20,12 +22,13 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
             _databaseContext = databaseContext;
             _configuration = configuration;
         }
-
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
-        [HttpPost]
+		[AllowAnonymous]
+		[HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -54,8 +57,9 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
 
                 List<Claim> claims = new List<Claim>();
                 claims.Add(new Claim("Id", user.ID.ToString()));
-                claims.Add(new Claim("Fullname", user.FullName ?? string.Empty));
-                claims.Add(new Claim("Username", user.Username));
+                claims.Add(new Claim("Name", user.FullName ?? string.Empty));
+                claims.Add(new Claim("Rolw", user.Role));
+				claims.Add(new Claim("Username", user.Username));
 
 
 
@@ -74,13 +78,13 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
             return View(model);
         }
 
-
-        public IActionResult Register()
+		[AllowAnonymous]
+		public IActionResult Register()
         {
             return View();
         }
-
-        [HttpPost]
+		[AllowAnonymous]
+		[HttpPost]
         public IActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -111,6 +115,11 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
         public IActionResult Profile()
         {
             return View();
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction(nameof(Login));
         }
     }
 }

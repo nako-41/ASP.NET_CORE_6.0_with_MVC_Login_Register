@@ -1,9 +1,11 @@
 ﻿using ASP.NET_CORE_6._0_with_MVC_Login_Register.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,8 +24,13 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
         {
             return View();
         }
+        [AllowAnonymous]
+		public IActionResult AccessDenied()
+		{
+			return View();
+		}
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
