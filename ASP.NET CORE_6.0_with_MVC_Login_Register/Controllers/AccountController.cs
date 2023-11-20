@@ -56,9 +56,9 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                 }
 
                 List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim("Id", user.ID.ToString()));
-                claims.Add(new Claim("Name", user.FullName ?? string.Empty));
-                claims.Add(new Claim("Rolw", user.Role));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
+                claims.Add(new Claim(ClaimTypes.Name, user.FullName ?? string.Empty));
+                claims.Add(new Claim(ClaimTypes.Role, user.Role));
 				claims.Add(new Claim("Username", user.Username));
 
 
