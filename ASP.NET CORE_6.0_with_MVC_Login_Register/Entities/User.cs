@@ -24,6 +24,9 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Entities
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
+        [StringLength(250)]
+        public string? ProfileImageFileName { get; set; } = "noimage.jpg";
+
         [Required]
 		[StringLength(30)]
 		public string Role { get; set; } = "user";

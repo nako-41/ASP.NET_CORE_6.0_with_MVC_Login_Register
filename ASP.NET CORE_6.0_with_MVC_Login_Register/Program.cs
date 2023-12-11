@@ -1,6 +1,7 @@
 using ASP.NET_CORE_6._0_with_MVC_Login_Register.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace ASP.NET_CORE_6._0_with_MVC_Login_Register
 {
@@ -11,6 +12,9 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
             builder.Services.AddDbContext<DatabaseContext>(opt =>
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

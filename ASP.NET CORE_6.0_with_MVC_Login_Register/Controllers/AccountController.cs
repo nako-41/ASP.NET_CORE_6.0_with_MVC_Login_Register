@@ -10,6 +10,8 @@ using NETCore.Encrypt.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
+
+
 namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
 {
     [Authorize]
@@ -23,13 +25,16 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
             _databaseContext = databaseContext;
             _configuration = configuration;
         }
+
         [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
+
 		[AllowAnonymous]
 		[HttpPost]
+
         public IActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -52,6 +57,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                     ModelState.AddModelError("", "Username or password is incorrect.");
                 }
 
+
                 List<Claim> claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
                 claims.Add(new Claim(ClaimTypes.Name, user.FullName ?? string.Empty));
@@ -60,12 +66,9 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
 
 
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
 
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
-
-
                 return RedirectToAction("Index", "Home");
 
             }
@@ -81,13 +84,16 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
             return hashed;
         }
 
+
         [AllowAnonymous]
 		public IActionResult Register()
         {
             return View();
         }
+
 		[AllowAnonymous]
 		[HttpPost]
+
         public IActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -98,12 +104,12 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                     View(model);
                 }
 
-
                 //string md5salt = _configuration.GetValue<string>("AppSettings:MD5Salt");
                 //string saltedpassword = model.Password + md5salt;
                 //string hashedpass = saltedpassword.MD5();
 
                 string hashedpass = DoMD5HashedString(model.Password);
+
 
                 User user = new()
                 {
@@ -113,6 +119,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
 
                 _databaseContext.Users.Add(user);
                 _databaseContext.SaveChanges();
+
             }
             return View(model);
         }
@@ -130,6 +137,8 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
             User user = _databaseContext.Users.FirstOrDefault(x => x.ID == userid);
 
             ViewData["fullname"] = user.FullName;
+            ViewData["ProfileImage"] = user.ProfileImageFileName;
+
         }
 
         [HttpPost]
@@ -143,9 +152,10 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                 user.FullName = fullname;
                 _databaseContext.SaveChanges();
 
+                ViewData["fullname"] = "fullname";
+
                 return RedirectToAction(nameof(Profile));
             }
-
 
             return View("Profile");
         }
@@ -169,6 +179,35 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
             }
 
             ProfileInfoLoader();
+            return View("Profile");
+        }
+
+        [HttpPost]
+        public IActionResult ProfileChangeImage([Required] IFormFile file)
+        {
+            if (ModelState.IsValid)
+            {
+
+                Guid userid = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                User user = _databaseContext.Users.FirstOrDefault(x => x.ID == userid);
+
+                string filename = $"p_{userid}.jpg";
+
+                Stream stream = new FileStream($"wwwroot/uploads/{filename}", FileMode.OpenOrCreate);
+
+
+                file.CopyTo(stream);
+
+                stream.Close();
+                stream.Dispose();
+
+                user.ProfileImageFileName = filename;
+                _databaseContext.SaveChanges();
+
+
+                return RedirectToAction(nameof(Profile));
+            }
+
             return View("Profile");
         }
 
