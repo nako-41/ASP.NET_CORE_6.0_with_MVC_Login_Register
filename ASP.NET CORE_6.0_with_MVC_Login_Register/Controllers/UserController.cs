@@ -41,5 +41,10 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
 
             return View(model);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
