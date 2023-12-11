@@ -11,7 +11,13 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row mb-3">
+    <div class="col">
+        <a asp.action="Create" class="btn btn-primary btn-sm"><i class="fa fa-plus me-2"></i>New User</a>
+    </div>
+</div>
+
+<div class="row mb-3">
     <div class="col">
         <table class="table table-hover table-sm">
             <thead>
@@ -36,7 +42,8 @@
                             @if (item.Locked)
                             {
                                 <i class="fa fa-check text-success"></i>
-                            }else
+                            }
+                            else
                             {
                                 <i class="fa fa-times text-danger"></i>
                             }
@@ -44,8 +51,8 @@
                         <td>@item.Role</td>
                         <td>@item.CreateDate</td>
                         <td class="text-end">
-                            <button type="button" class="btn btn-info btn-sm text-white"><i class="fa fa-edit me-2"></i>Edit</button>
-                            <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash me-2"></i>Delete</button>
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-info btn-sm text-white"><i class="fa fa-edit me-2"></i>Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger btn-sm"><i class="fa fa-trash me-2"></i>Delete</a>
                         </td>
                     </tr>
                 }
