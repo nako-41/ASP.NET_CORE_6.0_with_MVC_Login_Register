@@ -46,5 +46,19 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Create(CreateUserModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user=_mapper.Map<User>(model);
+                _databaseContext.Users.Add(user);
+                _databaseContext.SaveChanges();
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
     }
 }
