@@ -1,0 +1,48 @@
+﻿@using ASP.NET_CORE_6._0_with_MVC_Login_Register.Models.ViewModels;
+@model List<UserModel>
+
+<table class="table table-hover table-sm">
+    <thead>
+        <tr>
+
+            <th>FullName</th>
+            <th>UserName</th>
+            <th>Locked</th>
+            <th>Role</th>
+            <th>Created at</th>
+            <th>
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (UserModel item in Model)
+        {
+            <tr>
+                <td>@item.FullName</td>
+                <td>@item.Username</td>
+                <td>
+                    @if (item.Locked)
+                    {
+                        <i class="fa fa-check text-success"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-times text-danger"></i>
+                    }
+                </td>
+                <td>@item.Role</td>
+                <td>@item.CreateDate</td>
+                <td class="text-end">
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-info btn-sm text-white"><i class="fa fa-edit me-2"></i>Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.ID"
+                       onclick="return confirm('Are you sure want to delete this user : @item.Username ?')"
+                       class="btn btn-danger btn-sm"><i class="fa fa-trash me-2"></i>Delete</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>

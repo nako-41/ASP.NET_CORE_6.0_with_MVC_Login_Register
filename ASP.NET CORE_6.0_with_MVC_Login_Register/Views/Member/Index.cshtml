@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Members";
+}
+
+
+<div class="row">
+    <div class="col">
+        <h1 style="text-align:center" class="display-4">@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col">
+        <a asp-action="Create" class="btn btn-primary btn-sm"><i class="fa fa-plus me-2"></i>New Member</a>
+        <a id="reflesh" data-ajax="true" data-ajax-method="Get" data-ajax-url="/Member/MemberListPartial" data-ajax-update="#panel" class="btn btn-primary btn-sm"><i class="fa fa-plus me-2"></i>Reload</a>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col">
+        <div id="panel">
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        $(function(){
+            reflesh.click();
+        });
+    </script>
+}
