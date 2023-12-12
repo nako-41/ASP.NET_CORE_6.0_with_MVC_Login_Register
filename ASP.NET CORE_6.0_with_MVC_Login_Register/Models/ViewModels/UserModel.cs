@@ -39,4 +39,20 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Models.ViewModels
         [StringLength(30)]
         public string Role { get; set; } = "user";
     }
+    public class EditUserModel
+    {
+        [Required()]
+        [StringLength(50)]
+        public string Username { get; set; }
+
+        [Required()]
+        [StringLength(50)]
+        public string Fullname { get; set; }
+
+        public bool Locked { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public string Role { get; set; } = "user";
+    }
 }

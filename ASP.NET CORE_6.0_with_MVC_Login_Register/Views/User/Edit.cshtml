@@ -1,0 +1,73 @@
+﻿@using ASP.NET_CORE_6._0_with_MVC_Login_Register.Models.ViewModels;
+@model EditUserModel
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="row">
+    <div class="col">
+        <h2 style="text-align:center">@ViewData["Title"]</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4 offset-4">
+        <h1 class="display-4 border-bottom text-center pb-2 fa-bounce" style="color:#c8ff00"><i class="fa-solid fa-id-card me-2"></i></i></h1>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-4 offset-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+        <form method="post">
+
+            <div class="form-group mb-3">
+                <label asp-for="Fullname" class="form-label">Full name</label>
+                <Input asp-for="Fullname" class="form-control" placeholder="" />
+                <span asp-validation-for="Fullname" class="text-danger small"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Username" class="form-label">Username</label>
+                <Input asp-for="Username" class="form-control" placeholder="" />
+                <span asp-validation-for="Username" class="text-danger small"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Role" class="form-label">Role</label>
+                <select asp-for="Role" class="form-select">
+                    <option value="">Please Select</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger small"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="Locked" >
+                    <label class="form-check-label" asp-for="Locked">
+                      Locked
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group mb-3">
+                <button class="btn btn-primary " type="submit"><i class="fa-solid fa-right-to-bracket me-2"></i>Edit </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

@@ -11,6 +11,8 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register
             CreateMap<User, UserModel>().ReverseMap();    
 
             CreateMap<User, CreateUserModel>().ReverseMap();    
+
+            CreateMap<User, EditUserModel>().ReverseMap();    
         }
     }
 }
