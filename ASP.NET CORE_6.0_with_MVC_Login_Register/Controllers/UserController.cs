@@ -58,7 +58,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                     return View(model);
                 }
 
-                User user=_mapper.Map<User>(model);
+                User user = _mapper.Map<User>(model);
                 _databaseContext.Users.Add(user);
                 _databaseContext.SaveChanges();
 
@@ -96,6 +96,23 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
+        }
+
+        public IActionResult Delete(Guid id)
+        {
+            User user = _databaseContext.Users.Find(id);
+
+
+            if (user != null)
+            {
+
+                _databaseContext.Users.Remove(user);
+                _databaseContext.SaveChanges();
+            }
+
+
+            return RedirectToAction(nameof(Index));
+
         }
     }
 }

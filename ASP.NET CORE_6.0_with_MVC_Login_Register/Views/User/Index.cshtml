@@ -5,6 +5,7 @@
     ViewData["Title"] = "Users";
 }
 
+
 <div class="row">
     <div class="col">
         <h1 class="display-4">@ViewData["Title"]</h1>
@@ -22,17 +23,19 @@
         <table class="table table-hover table-sm">
             <thead>
                 <tr>
+
                     <th>FullName</th>
                     <th>UserName</th>
                     <th>Locked</th>
                     <th>Role</th>
                     <th>Created at</th>
                     <th>
-
                     </th>
+
                 </tr>
             </thead>
             <tbody>
+
                 @foreach (UserModel item in Model)
                 {
                     <tr>
@@ -52,10 +55,13 @@
                         <td>@item.CreateDate</td>
                         <td class="text-end">
                             <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-info btn-sm text-white"><i class="fa fa-edit me-2"></i>Edit</a>
-                            <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger btn-sm"><i class="fa fa-trash me-2"></i>Delete</a>
+                            <a asp-action="Delete" asp-route-id="@item.ID"
+                            onclick="return confirm('Are you sure want to delete this user : @item.Username ?')" 
+                            class="btn btn-danger btn-sm"><i class="fa fa-trash me-2"></i>Delete</a>
                         </td>
                     </tr>
                 }
+
             </tbody>
 
         </table>
