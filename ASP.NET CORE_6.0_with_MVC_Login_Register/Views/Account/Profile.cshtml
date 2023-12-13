@@ -67,8 +67,9 @@
             <div class="form-group mt-3">
                 <label class="form-label small">API Token<span class="badge bg-danger ms-2">required</span></label>
                 <div>
-                    <textarea class="form-control" rows="5" readonly>@ViewContext.HttpContext.Request.Cookies["abc"] </textarea>
-                    <p class="small">Not: Use Cookie Authentication</p>
+                    <textarea id="token" class="form-control" rows="5" readonly>@ViewContext.HttpContext.Request.Cookies["abc"] </textarea>
+                    <p class="small">Not: Use Cookie Authentication <span class="badge bg-secondary ms-3 cursor-pointer" onclick="copyTo()">Copy to clipboard</span></p>
+                    <p class="alert alert-info small">Headers &gt; Cookie &gt; abc.auth=[token]</p>
                 </div>
             </div>
 
@@ -82,16 +83,17 @@
     @if (ViewData["result"] != null && ViewData["result"] == "PasswordChanged")
     {
         <script>
-            toastr["success"]("Şifreniz Değiştirilmiştir", "Şifre Değişti")
+            toastr["success"]("Sifreniz Degistirilmistir", "Sifre Degisti")
         </script>
     }
 
-    @*    @if (ViewData["fullnames"] != null && ViewData["fullnames"] == "fullname")
-    {
     <script>
-    toastr["success"]("Fullname Değiştirilmiştir", "Fullname Değişti")
-    </script>
-    }
-    *@
+        function copyTo(){
+            var txt = document.getElementById("token");
+            txt.select();
+            navigator.clipboard.writeText(txt.value);
 
-    }
+            toastr.success("Copled the token.","Copy");
+        }
+    </script>
+}
