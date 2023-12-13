@@ -42,5 +42,10 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
         {
             return Json(new {id=1,name="ali"});
         }
+        [HttpPost]
+        public IActionResult PostData([FromBody]PostDataApiModel model)
+        {
+            return Json(new { Error = false, Message = "success" });
+        }
     }
 }
