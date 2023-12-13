@@ -24,6 +24,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
         {
             return View();
         }
+
         [AllowAnonymous]
 		public IActionResult AccessDenied()
 		{
@@ -34,6 +35,12 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public IActionResult GetData()
+        {
+            return Json(new {id=1,name="ali"});
         }
     }
 }

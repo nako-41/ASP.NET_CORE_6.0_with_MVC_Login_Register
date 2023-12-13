@@ -64,6 +64,15 @@
                 </div>
             </form>
 
+            <div class="form-group mt-3">
+                <label class="form-label small">API Token<span class="badge bg-danger ms-2">required</span></label>
+                <div>
+                    <textarea class="form-control" rows="5" readonly>@ViewContext.HttpContext.Request.Cookies["abc"] </textarea>
+                    <p class="small">Not: Use Cookie Authentication</p>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>
