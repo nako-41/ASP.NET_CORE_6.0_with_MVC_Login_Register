@@ -38,7 +38,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
 
             // _databaseContext.Users.Select(x => new UserModel { FullName = x.FullName }).ToList();
 
-
+             
             return View(model);
         }
 

@@ -11,23 +11,34 @@
 
 <div class="row mb-3">
     <div class="col">
-        <a asp-action="Create" class="btn btn-primary btn-sm"><i class="fa fa-plus me-2"></i>New Member</a>
-        <a id="reflesh" data-ajax="true" data-ajax-method="Get" data-ajax-url="/Member/MemberListPartial" data-ajax-update="#panel" class="btn btn-primary btn-sm"><i class="fa fa-plus me-2"></i>Reload</a>
+        <a class="btn btn-primary btn-sm" data-ajax="true" data-ajax-url="/Member/MemberAddPartial" data-bs-toggle="modal" data-ajax-method="Post" data-bs-target="#modaladd" data-ajax-update="#modaladdcontent"><i class="fa fa-plus me-2"></i>Create Member</a>
+
+       
+        <a id="reflesh" data-ajax="true" data-ajax-method="get" data-ajax-url="/Member/MemberListPartial" data-ajax-update="#panel" class="btn btn-secondary btn-sm"><i class="fa fa-sync-alt me-2"></i>Reload</a>
     </div>
 </div>
+
+
+     @* Modal*@
 
 <div class="row mb-3">
     <div class="col">
         <div id="panel">
+            <div class="modal fade" id="modaladd" tabindex="-1"  aria-hidden="true">
+                <div  class="modal-dialog">
+                    <div id="modaladdcontent" class="modal-content">
 
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-
-
 @section Scripts{
+
     <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+
     <script>
         $(function(){
             reflesh.click();

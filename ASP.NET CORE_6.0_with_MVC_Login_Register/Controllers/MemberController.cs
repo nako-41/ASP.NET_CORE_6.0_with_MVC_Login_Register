@@ -30,5 +30,33 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
             return PartialView("_MemberListPartial", model);
 
         }
+
+
+        public IActionResult MemberAddPartial()
+        {
+
+            return PartialView("_MemberAddPartial", new CreateUserModel());
+
+        }
+
+        [HttpPost]
+        public IActionResult AddNewMember(CreateUserModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (_databaseContext.Users.Any(x => x.Username.ToLower() == model.Username.ToLower()))
+                {
+                    ModelState.AddModelError(nameof(model.Username), "Username is already exists");
+                    return View(model);
+                }
+
+                User user = _mapper.Map<User>(model);
+                _databaseContext.Users.Add(user);
+                _databaseContext.SaveChanges();
+            }
+
+            return PartialView("_MemberAddPartial",model);
+
+        }
     }
 }
