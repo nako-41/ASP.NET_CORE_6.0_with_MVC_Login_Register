@@ -1,5 +1,6 @@
 ﻿using ASP.NET_CORE_6._0_with_MVC_Login_Register.Context;
 using ASP.NET_CORE_6._0_with_MVC_Login_Register.Entities;
+using ASP.NET_CORE_6._0_with_MVC_Login_Register.Helpers;
 using ASP.NET_CORE_6._0_with_MVC_Login_Register.Models.ViewModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,13 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
     {
         private readonly DatabaseContext _databaseContext;
         private readonly IMapper _mapper;
+        private readonly IHasher _hasher;
 
-        public UserController(DatabaseContext databaseContext, IMapper mapper)
+        public UserController(DatabaseContext databaseContext, IMapper mapper, IHasher hasher)
         {
             _databaseContext = databaseContext;
             _mapper = mapper;
+            _hasher = hasher;
         }
 
         public IActionResult Index()
@@ -59,6 +62,9 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                 }
 
                 User user = _mapper.Map<User>(model);
+
+                user.Password = _hasher.DoMD5HashedString(model.Password);
+
                 _databaseContext.Users.Add(user);
                 _databaseContext.SaveChanges();
 

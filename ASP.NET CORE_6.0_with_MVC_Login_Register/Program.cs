@@ -1,4 +1,5 @@
 using ASP.NET_CORE_6._0_with_MVC_Login_Register.Context;
+using ASP.NET_CORE_6._0_with_MVC_Login_Register.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -31,6 +32,8 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register
                      opt.LogoutPath = "/Account/Logout";
                      opt.AccessDeniedPath = "/Home/AccessDenied";
                  });
+
+            builder.Services.AddScoped<IHasher, Hasher>();
 
             var app = builder.Build();
 

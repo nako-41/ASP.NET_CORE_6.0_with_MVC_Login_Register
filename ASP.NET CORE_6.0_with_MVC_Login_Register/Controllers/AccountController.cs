@@ -1,5 +1,6 @@
 ﻿using ASP.NET_CORE_6._0_with_MVC_Login_Register.Context;
 using ASP.NET_CORE_6._0_with_MVC_Login_Register.Entities;
+using ASP.NET_CORE_6._0_with_MVC_Login_Register.Helpers;
 using ASP.NET_CORE_6._0_with_MVC_Login_Register.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -19,11 +20,13 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
     {
         private readonly DatabaseContext _databaseContext;
         private readonly IConfiguration _configuration;
+        private readonly IHasher _hasher;
 
-        public AccountController(DatabaseContext databaseContext, IConfiguration configuration)
+        public AccountController(DatabaseContext databaseContext, IConfiguration configuration, IHasher hasher)
         {
             _databaseContext = databaseContext;
             _configuration = configuration;
+            _hasher = hasher;
         }
 
         [AllowAnonymous]
@@ -39,7 +42,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
         {
             if (ModelState.IsValid)
             {
-                string hashedpass = DoMD5HashedString(model.Password);
+                string hashedpass = _hasher.DoMD5HashedString(model.Password);
 
                 User user = _databaseContext.Users.SingleOrDefault(x => x.Username.ToLower() == model.Username.ToLower() && x.Password == hashedpass);
 
@@ -51,39 +54,26 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                         return View(model);
                     }
                 }
-
                 else
                 {
                     ModelState.AddModelError("", "Username or password is incorrect.");
                 }
-
-
+             
                 List<Claim> claims = new List<Claim>();
+             
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
                 claims.Add(new Claim(ClaimTypes.Name, user.FullName ?? string.Empty));
                 claims.Add(new Claim(ClaimTypes.Role, user.Role));
                 claims.Add(new Claim("Username", user.Username));
-
-
+             
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
-
+             
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                 return RedirectToAction("Index", "Home");
-
             }
-
             return View(model);
         }
-
-        private string DoMD5HashedString(string s)
-        {
-            string md5salt = _configuration.GetValue<string>("AppSettings:MD5Salt");
-            string salted =s+ md5salt;
-            string hashed = salted.MD5();
-            return hashed;
-        }
-
 
         [AllowAnonymous]
 		public IActionResult Register()
@@ -108,7 +98,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                 //string saltedpassword = model.Password + md5salt;
                 //string hashedpass = saltedpassword.MD5();
 
-                string hashedpass = DoMD5HashedString(model.Password);
+                string hashedpass =_hasher.DoMD5HashedString(model.Password);
 
 
                 User user = new()
@@ -168,7 +158,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                 Guid userid = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 User user = _databaseContext.Users.FirstOrDefault(x => x.ID == userid);
 
-                string hashedpassword = DoMD5HashedString(password);
+                string hashedpassword =_hasher.DoMD5HashedString(password);
 
                 user.Password = hashedpassword;
                 _databaseContext.SaveChanges();
