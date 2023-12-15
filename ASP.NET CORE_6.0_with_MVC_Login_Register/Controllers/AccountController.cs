@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Server.HttpSys;
 using NETCore.Encrypt.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
@@ -15,7 +16,8 @@ using System.Security.Claims;
 
 namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = "Cookies")]
     public class AccountController : Controller
     {
         private readonly DatabaseContext _databaseContext;
@@ -35,8 +37,8 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
             return View();
         }
 
-		[AllowAnonymous]
-		[HttpPost]
+        [AllowAnonymous]
+        [HttpPost]
 
         public IActionResult Login(LoginViewModel model)
         {
@@ -58,17 +60,17 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                 {
                     ModelState.AddModelError("", "Username or password is incorrect.");
                 }
-             
+
                 List<Claim> claims = new List<Claim>();
-             
+
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()));
                 claims.Add(new Claim(ClaimTypes.Name, user.FullName ?? string.Empty));
                 claims.Add(new Claim(ClaimTypes.Role, user.Role));
                 claims.Add(new Claim("Username", user.Username));
-             
+
                 ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
-             
+
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
                 return RedirectToAction("Index", "Home");
             }
@@ -76,21 +78,21 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
         }
 
         [AllowAnonymous]
-		public IActionResult Register()
+        public IActionResult Register()
         {
             return View();
         }
 
-		[AllowAnonymous]
-		[HttpPost]
+        [AllowAnonymous]
+        [HttpPost]
 
         public IActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (_databaseContext.Users.Any(x=>x.Username.ToLower()==model.Username.ToLower()))
+                if (_databaseContext.Users.Any(x => x.Username.ToLower() == model.Username.ToLower()))
                 {
-                    ModelState.AddModelError(nameof(model.Username),"Username is already exists.");
+                    ModelState.AddModelError(nameof(model.Username), "Username is already exists.");
                     View(model);
                 }
 
@@ -98,13 +100,13 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                 //string saltedpassword = model.Password + md5salt;
                 //string hashedpass = saltedpassword.MD5();
 
-                string hashedpass =_hasher.DoMD5HashedString(model.Password);
+                string hashedpass = _hasher.DoMD5HashedString(model.Password);
 
 
                 User user = new()
                 {
-                    Username=model.Username,
-                    Password=hashedpass
+                    Username = model.Username,
+                    Password = hashedpass
                 };
 
                 _databaseContext.Users.Add(user);
@@ -136,7 +138,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
         {
             if (ModelState.IsValid)
             {
-              Guid userid = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                Guid userid = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 User user = _databaseContext.Users.FirstOrDefault(x => x.ID == userid);
 
                 user.FullName = fullname;
@@ -158,7 +160,7 @@ namespace ASP.NET_CORE_6._0_with_MVC_Login_Register.Controllers
                 Guid userid = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 User user = _databaseContext.Users.FirstOrDefault(x => x.ID == userid);
 
-                string hashedpassword =_hasher.DoMD5HashedString(password);
+                string hashedpassword = _hasher.DoMD5HashedString(password);
 
                 user.Password = hashedpassword;
                 _databaseContext.SaveChanges();
